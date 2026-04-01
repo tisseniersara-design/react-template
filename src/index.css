@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+@import "tailwindcss";
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-100%); opacity: 0; }
+}
+
+@layer base {
+  :root {
+    --background: 249 100% 96%;
+    --foreground: 228 47% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 228 47% 15%;
+    --primary: 71 96% 56%;
+    --primary-foreground: 228 47% 15%;
+    --secondary: 0 0% 100% / 0;
+    --secondary-foreground: 228 47% 15%;
+    --muted: 261 100% 90%;
+    --muted-foreground: 228 47% 15%;
+    --accent: 72 96% 74%;
+    --accent-foreground: 228 47% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 228 47% 15%;
+    --destructive: 0 97% 47%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 261 100% 90%;
+    --input: 261 100% 90%;
+    --ring: 213 90% 52%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+}
+
+@theme {
+    --color-primary: hsl(71 96% 56%);
+    --color-primary-foreground: hsl(228 47% 15%);
+    --color-background: hsl(249 100% 96%);
+    --color-foreground: hsl(228 47% 15%);
+    --color-card: hsl(0 0% 100%);
+    --color-card-foreground: hsl(228 47% 15%);
+    --color-border: hsl(261 100% 90%);
+    --color-input: hsl(261 100% 90%);
+    --color-accent: hsl(72 96% 74%);
+    --color-accent-foreground: hsl(228 47% 15%);
+    --color-muted: hsl(261 100% 90%);
+    --color-muted-foreground: hsl(228 47% 15%);
+    --color-popover: hsl(0 0% 100%);
+    --color-popover-foreground: hsl(228 47% 15%);
+    --color-destructive: hsl(0 97% 47%);
+    --color-ring: hsl(213 90% 52%);
+    --font-sans: "Inter", sans-serif;
+    --font-size-base: 14px;
+  }

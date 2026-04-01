@@ -1,0 +1,7 @@
+export { default as IconDashboard } from "./Widget.svg?react"
+export { default as IconHabitat } from "./Home.svg?react"
+export { default as IconEquipements } from "./Équipements.svg?react"
+export { default as IconReleves } from "./Relevés.svg?react"
+export { default as IconCompte } from "./User Circle.svg?react"
+export { default as IconDocuments } from "./Clipboard List.svg?react"
+export { default as IconEcogestes } from "./Ecogestes.svg?react"
