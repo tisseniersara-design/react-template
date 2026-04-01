@@ -7,20 +7,19 @@ import {
   IconHabitat,
   IconEquipements,
   IconReleves,
-  IconCompte,
   IconDocuments,
   IconEcogestes,
 } from "@/assets/icons"
+import { logout } from "@/lib/auth"
 
-// ─── Items du menu avec leur URL ──────────────────────────────────────────────
+// ─── Items du menu — sans Mon Compte ─────────────────────────────────────────
 const menuItems = [
-  { icon: IconDashboard, label: "Mon Tableau de bord", path: "/" },
-  { icon: IconHabitat,   label: "Mon Habitat",         path: "/habitat" },
-  { icon: IconEquipements, label: "Mes équipements",   path: "/equipements" },
-  { icon: IconReleves,   label: "Mes relevés",         path: "/releves" },
-  { icon: IconCompte,    label: "Mon Compte",          path: "/compte" },
-  { icon: IconDocuments, label: "Mes documents",       path: "/documents" },
-  { icon: IconEcogestes, label: "Eco gestes",          path: "/ecogestes" },
+  { icon: IconDashboard,   label: "Mon Tableau de bord", path: "/" },
+  { icon: IconHabitat,     label: "Mon Habitat",         path: "/habitat" },
+  { icon: IconEquipements, label: "Mes équipements",     path: "/equipements" },
+  { icon: IconReleves,     label: "Mes relevés",         path: "/releves" },
+  { icon: IconDocuments,   label: "Mes documents",       path: "/documents" },
+  { icon: IconEcogestes,   label: "Eco gestes",          path: "/ecogestes" },
 ]
 
 type Props = {
@@ -30,11 +29,7 @@ type Props = {
 
 export function Sidebar({ collapsed, onToggle }: Props) {
   const [hovered, setHovered] = useState<number | null>(null)
-
-  // useLocation donne l'URL actuelle ex: { pathname: "/habitat" }
   const location = useLocation()
-
-  // useNavigate permet de changer de page
   const navigate = useNavigate()
 
   return (
@@ -64,62 +59,112 @@ export function Sidebar({ collapsed, onToggle }: Props) {
         }} alt="econaute" />
       </div>
 
-      {/* ── Navigation ───────────────────────────────────────────────────────── */}
-      <nav style={{ display: "flex", flexDirection: "column" }}>
-        {menuItems.map((item, index) => {
-          // L'item est actif si son path correspond à l'URL actuelle
-          const isActive = location.pathname === item.path
-          const isHovered = hovered === index
+      {/* ── Navigation + Logout ──────────────────────────────────────────────── */}
+      <nav style={{ display: "flex", flexDirection: "column", flex: 1 }}>
 
-          const iconBg = isActive
-            ? "var(--color-primary)"
-            : isHovered
-            ? "var(--color-accent)"
-            : "transparent"
+        {/* Items du menu */}
+        <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+          {menuItems.map((item, index) => {
+            const isActive = location.pathname === item.path
+            const isHovered = hovered === index
 
-          return (
-            <div
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              onMouseEnter={() => setHovered(index)}
-              onMouseLeave={() => setHovered(null)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "8px 0",
-                cursor: "pointer",
-                height: 60,
-              }}
-            >
-              <div style={{
-                width: 44,
-                height: 44,
-                borderRadius: 12,
-                backgroundColor: iconBg,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-                transition: "background-color 0.2s ease",
-              }}>
-                <item.icon width={24} height={24} style={{ color: "var(--color-foreground)" }} />
+            const iconBg = isActive
+              ? "var(--color-primary)"
+              : isHovered
+              ? "var(--color-accent)"
+              : "transparent"
+
+            return (
+              <div
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                onMouseEnter={() => setHovered(index)}
+                onMouseLeave={() => setHovered(null)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "8px 0",
+                  cursor: "pointer",
+                  height: 60,
+                }}
+              >
+                <div style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  backgroundColor: iconBg,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  transition: "background-color 0.2s ease",
+                }}>
+                  <item.icon width={24} height={24} style={{ color: "var(--color-foreground)" }} />
+                </div>
+                <span style={{
+                  fontSize: 14,
+                  color: "var(--color-foreground)",
+                  opacity: collapsed ? 0 : isActive || isHovered ? 1 : 0.5,
+                  fontWeight: isActive ? 600 : 400,
+                  transition: "opacity 0.4s ease",
+                  whiteSpace: "nowrap",
+                }}>
+                  {item.label}
+                </span>
               </div>
-              <span style={{
-                fontSize: 14,
-                color: "var(--color-foreground)",
-                opacity: collapsed ? 0 : isActive || isHovered ? 1 : 0.5,
-                fontWeight: isActive ? 600 : 400,
-                transition: "opacity 0.4s ease",
-                whiteSpace: "nowrap",
-              }}>
-                {item.label}
-              </span>
-            </div>
-          )
-        })}
-      </nav>
+            )
+          })}
+        </div>
 
+        {/* ── Bouton Logout — collé en bas ─────────────────────────────────── */}
+        <div
+          onClick={() => {
+            logout()
+            navigate("/login")
+          }}
+          onMouseEnter={() => setHovered(99)}
+          onMouseLeave={() => setHovered(null)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "8px 0",
+            cursor: "pointer",
+            height: 60,
+          }}
+        >
+          <div style={{
+            width: 44,
+            height: 44,
+            borderRadius: 12,
+            backgroundColor: hovered === 99 ? "var(--color-accent)" : "transparent",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+            transition: "background-color 0.2s ease",
+          }}>
+            {/* Icône logout */}
+            <svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-foreground)" }}>
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </div>
+          <span style={{
+            fontSize: 14,
+            color: "var(--color-foreground)",
+            opacity: collapsed ? 0 : hovered === 99 ? 1 : 0.5,
+            fontWeight: 400,
+            transition: "opacity 0.4s ease",
+            whiteSpace: "nowrap",
+          }}>
+            Se déconnecter
+          </span>
+        </div>
+
+      </nav>
     </aside>
   )
 }

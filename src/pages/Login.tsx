@@ -3,6 +3,8 @@ import logoIcon from "@/assets/logo-icon.svg"
 import logoName from "@/assets/logo-name.svg"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { login } from "@/lib/auth"
+import { useNavigate } from "react-router-dom"
 
 // ─── SVG Google ───────────────────────────────────────────────────────────────
 function GoogleIcon() {
@@ -31,6 +33,7 @@ function Separator() {
 export function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const navigate = useNavigate()
 
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
@@ -126,7 +129,10 @@ export function Login() {
                 fontSize: 14,
                 fontWeight: 600,
               }}
-              onClick={() => console.log("Email login", email, password)}
+              onClick={() => {
+                login()
+                navigate("/")
+              }}
             >
               Se connecter
             </Button>

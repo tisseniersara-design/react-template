@@ -2,11 +2,12 @@ import { useState, useEffect } from "react"
 import { Routes, Route} from "react-router-dom"
 import { Sidebar } from "@/components/Sidebar"
 import { Header } from "@/components/Header"
-import { Footer } from "@/components/Footer"
 import { MobileMenu } from "@/components/MobileMenu"
 import { Dashboard } from "@/pages/Dashboard"
 import { Habitat } from "@/pages/Habitat"
 import { Login } from "@/pages/Login"
+import { Compte } from "@/pages/Compte"
+import { ProtectedRoute } from "@/components/ProtectedRoute"
 
 // ─── Layout principal (avec sidebar + header) ─────────────────────────────────
 function AppLayout() {
@@ -52,7 +53,6 @@ function AppLayout() {
           }}>
             <Header
               userName="Thierry VAYSSIERE"
-              onLogout={() => console.log("déconnexion")}
             />
           </div>
 
@@ -66,13 +66,12 @@ function AppLayout() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/habitat" element={<Habitat />} />
+              <Route path="/compte" element={<Compte />} />
             </Routes>
           </main>
 
         </div>
       </div>
-
-      <Footer />
     </div>
   )
 }
@@ -85,8 +84,12 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       {/* Toutes les pages avec sidebar */}
-      <Route path="/*" element={<AppLayout />} />
-    </Routes>
+      <Route path="/*" element={
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    } />
+  </Routes>
   )
 }
 

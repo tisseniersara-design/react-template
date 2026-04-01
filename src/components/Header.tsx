@@ -1,44 +1,70 @@
-import { IconCompte } from "@/assets/icons"
-import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom"
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 type Props = {
   userName: string
-  onLogout: () => void
+  userPhoto?: string | null
 }
 
-export function Header({ userName, onLogout,}: Props) {
+export function Header({ userName, userPhoto }: Props) {
+  const navigate = useNavigate()
+
+  // ─── Initiales pour l'avatar par défaut ───────────────────────────────────
+  const initiales = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
+
   return (
-    <header
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        backgroundColor: "var(--color-background)",
-        borderRadius: 16,
-        height: 64,
-        width: "100%",
-      }}
-    >
-      {/* ── Gauche : icône + nom utilisateur (masqué sur mobile) ─────────────── */}
-      <div className="hidden lg:flex" style={{ alignItems: "center", gap: 8 }}>
-        <IconCompte width={20} height={20} style={{ color: "var(--color-foreground)" }} />
-        <span style={{ fontWeight: 700, fontSize: 14, color: "var(--color-foreground)" }}>
+    <header style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      height: 64,
+      width: "100%",
+    }}>
+
+      {/* ── Profil cliquable ─────────────────────────────────────────────── */}
+      <div
+        onClick={() => navigate("/compte")}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          cursor: "pointer",
+          padding: "6px 12px",
+          borderRadius: 12,
+          transition: "background-color 0.2s ease",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--color-muted)")}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+      >
+        {/* Avatar */}
+        <div style={{
+          width: 36,
+          height: 36,
+          borderRadius: "50%",
+          backgroundColor: "var(--color-muted)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          flexShrink: 0,
+        }}>
+          {userPhoto
+            ? <img src={userPhoto} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="Photo" />
+            : <span style={{ fontSize: 13, fontWeight: 700, color: "var(--color-foreground)" }}>{initiales}</span>
+          }
+        </div>
+
+        {/* Nom */}
+        <span className="hidden lg:block" style={{ fontSize: 14, fontWeight: 600, color: "var(--color-foreground)" }}>
           {userName}
         </span>
-      </div>
 
-      {/* ── Droite : bouton déconnexion (toujours visible) ───────────────────── */}
-      <Button
-        onClick={onLogout}
-        style={{
-          backgroundColor: "var(--color-primary)",
-          color: "var(--color-foreground)",
-          marginLeft: "auto",
-        }}
-      >
-        Se déconnecter
-      </Button>
+      </div>
     </header>
   )
 }
